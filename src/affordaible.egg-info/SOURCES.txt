@@ -1,0 +1,8 @@
+README.md
+pyproject.toml
+src/affordaible/__init__.py
+src/affordaible.egg-info/PKG-INFO
+src/affordaible.egg-info/SOURCES.txt
+src/affordaible.egg-info/dependency_links.txt
+src/affordaible.egg-info/requires.txt
+src/affordaible.egg-info/top_level.txt
