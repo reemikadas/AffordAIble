@@ -44,3 +44,24 @@ class LoanScenario:
     @property
     def loan_amount(self) -> float:
         return self.purchase_price - self.down_payment
+
+
+@dataclass(frozen=True)
+class HousingCostAssumptions:
+    annual_property_tax_rate: float
+    annual_homeowners_insurance: float
+    annual_mortgage_insurance_rate: float
+    monthly_hoa_dues: float
+
+    def __post_init__(self) -> None:
+        if not 0 <= self.annual_property_tax_rate <= 1:
+            raise ValueError("Annual property tax rate must be between zero and one.")
+        
+        if self.annual_homeowners_insurance < 0:
+            raise ValueError("Annual homeowners insurance cannot be negative.")
+        
+        if not 0 <= self.annual_mortgage_insurance_rate <= 1:
+            raise ValueError("Annual mortgage insurance rate must be between zero and one.")
+        
+        if self.monthly_hoa_dues < 0:
+            raise ValueError("Monthly HOA dues cannot be negative.")
