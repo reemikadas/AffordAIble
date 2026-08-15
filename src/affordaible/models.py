@@ -65,3 +65,22 @@ class HousingCostAssumptions:
         
         if self.monthly_hoa_dues < 0:
             raise ValueError("Monthly HOA dues cannot be negative.")
+
+
+@dataclass(frozen=True)
+class MonthlyHousingCostBreakdown:
+    principal_and_interest: float
+    property_tax: float
+    homeowners_insurance: float
+    mortgage_insurance: float
+    hoa_dues: float
+
+    @property
+    def total(self) -> float:
+        return (
+            self.principal_and_interest
+            + self.property_tax
+            + self.homeowners_insurance
+            + self.mortgage_insurance
+            + self.hoa_dues
+        )
