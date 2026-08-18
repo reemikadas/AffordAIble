@@ -1,6 +1,6 @@
 import pytest
 
-from affordaible.models import BuyerProfile, HousingCostAssumptions, LoanScenario
+from affordaible.models import BuyerProfile, DtiLimits, HousingCostAssumptions, LoanScenario, MonthlyHousingCostBreakdown
 
 
 def test_buyer_profile_accepts_valid_values() -> None:
@@ -177,4 +177,44 @@ def test_housing_cost_assumptions_rejects_negative_hoa_dues() -> None:
             annual_homeowners_insurance=1800,
             annual_mortgage_insurance_rate=0.005,
             monthly_hoa_dues=-350,
+        )
+
+
+def test_dti_limits_accepts_valid_ratios() -> None:
+    limits = DtiLimits(
+        maximum_front_end_ratio = 0.28,
+        maximum_back_end_ratio = 0.36,
+    )
+
+    assert limits.maximum_front_end_ratio == 0.28
+    assert limits.maximum_back_end_ratio == 0.36
+
+
+@pytest.mark.parametrize("invalid_ratio", [0, -0.01, 1.01])
+def test_dti_limits_rejects_invalid_front_end_ratio(
+    invalid_ratio: float,
+) -> None:
+    with pytest.raises(ValueError, match="Maximum front-end ratio"):
+        DtiLimits(
+            maximum_front_end_ratio = invalid_ratio,
+            maximum_back_end_ratio = 0.36,
+        )
+
+
+@pytest.mark.parametrize("invalid_ratio", [0, -0.01, 1.01])
+def test_dti_limits_rejects_invalid_back_end_ratio(
+    invalid_ratio: float,
+) -> None:
+    with pytest.raises(ValueError, match="Maximum back-end ratio"):
+        DtiLimits(
+            maximum_front_end_ratio = 0.28,
+            maximum_back_end_ratio = invalid_ratio,
+        )
+
+
+def test_dti_limits_rejects_front_end_above_back_end() -> None:
+    with pytest.raises(ValueError, match="Maximum front-end ratio cannot exceed"):
+        DtiLimits(
+            maximum_front_end_ratio=0.40,
+            maximum_back_end_ratio=0.35,
         )

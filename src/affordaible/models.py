@@ -84,3 +84,28 @@ class MonthlyHousingCostBreakdown:
             + self.mortgage_insurance
             + self.hoa_dues
         )
+
+
+@dataclass(frozen=True)
+class DtiLimits:
+    maximum_front_end_ratio: float
+    maximum_back_end_ratio: float
+
+    def __post_init__(self) -> None:
+        if not 0 < self.maximum_front_end_ratio <= 1:
+            raise ValueError(
+                "Maximum front-end ratio must be greater than zero "
+                "and no greater than one."
+            )
+        
+        if not 0 < self.maximum_back_end_ratio <= 1:
+            raise ValueError(
+                "Maximum back-end ratio must be greater than zero "
+                "and no greater than one."
+            )
+        
+        if self.maximum_front_end_ratio > self.maximum_back_end_ratio:
+            raise ValueError(
+                "Maximum front-end ratio cannot exceed "
+                "maximum back-end ratio."
+            )
