@@ -1,6 +1,11 @@
 import pytest
 
-from affordaible.models import BuyerProfile, DtiLimits, HousingCostAssumptions, LoanScenario, MonthlyHousingCostBreakdown
+from affordaible.models import (
+    BuyerProfile,
+    DtiLimits,
+    HousingCostAssumptions,
+    LoanScenario,
+)
 
 
 def test_buyer_profile_accepts_valid_values() -> None:

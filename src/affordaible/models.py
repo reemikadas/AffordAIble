@@ -109,3 +109,26 @@ class DtiLimits:
                 "Maximum front-end ratio cannot exceed "
                 "maximum back-end ratio."
             )
+
+
+@dataclass(frozen=True)
+class MonthlyHousingBudget:
+    front_end_limit: float
+    back_end_limit_after_debt: float
+
+    @property
+    def maximum_housing_cost(self) -> float:
+        return max(
+            0,
+            min(
+                self.front_end_limit,
+                self.back_end_limit_after_debt,
+            ),
+        )
+    
+    @property
+    def limiting_factor(self) -> str:
+        if self.front_end_limit <= self.back_end_limit_after_debt:
+            return "front_end"
+        
+        return "back_end"
